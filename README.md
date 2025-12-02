@@ -72,13 +72,28 @@ npm run dev
 
 ### Build
 
-Create a production-ready executable for your OS:
+Create a production-ready executable for your OS. The output will be in the `release` directory.
 
+#### macOS (DMG)
 ```bash
-npm run build
+npm run dist:mac
 ```
 
-The output will be in the `dist` directory.
+#### Windows (NSIS Installer)
+```bash
+npm run dist:win
+```
+> **Note**: Building for Windows on macOS/Linux requires **Wine** to be installed.
+
+#### Linux (AppImage)
+```bash
+npm run dist:linux
+```
+
+#### All Platforms
+```bash
+npm run dist
+```
 
 ## Configuration
 
