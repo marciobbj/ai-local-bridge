@@ -23,9 +23,12 @@ const Sidebar = () => {
     return (
         <div className="flex flex-col h-full p-4">
             <div className="flex items-center justify-between mb-6">
-                <h1 className="text-xl font-bold text-gray-400">
-                    IA Local Bridge
-                </h1>
+                <div className="flex items-center gap-2">
+                    <img src="/custom_icon.svg" alt="App Icon" className="w-8 h-8 rounded-lg" />
+                    <h1 className="text-xl font-bold text-gray-400">
+                        IA Local Bridge
+                    </h1>
+                </div>
                 <button onClick={toggleSidebar} className="text-gray-400 hover:text-white">
                     <PanelLeftClose size={20} />
                 </button>

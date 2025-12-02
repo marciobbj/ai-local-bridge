@@ -1,7 +1,7 @@
 {
   "name": "ai-client",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.0.1",
   "main": "electron/main.cjs",
   "type": "module",
   "scripts": {
@@ -11,7 +11,11 @@
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "electron:build": "vite build && electron-builder"
+    "electron:build": "vite build && electron-builder",
+    "dist": "npm run build && electron-builder",
+    "dist:mac": "npm run build && electron-builder --mac",
+    "dist:win": "npm run build && electron-builder --win",
+    "dist:linux": "npm run build && electron-builder --linux"
   },
   "dependencies": {
     "clsx": "^2.1.1",
@@ -44,14 +48,28 @@
     "wait-on": "^9.0.3"
   },
   "build": {
-    "appId": "com.example.aiclient",
-    "productName": "AI Client",
+    "appId": "com.marciobbj.ialocalbridge",
+    "productName": "IA Local Bridge",
     "directories": {
-      "output": "dist-electron"
+      "output": "release"
     },
     "files": [
       "dist/**/*",
-      "electron/**/*"
-    ]
+      "electron/**/*",
+      "package.json"
+    ],
+    "mac": {
+      "target": "dmg",
+      "category": "public.app-category.productivity",
+      "icon": "public/icon.png"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "public/icon.png"
+    },
+    "linux": {
+      "target": "AppImage",
+      "icon": "public/icon.png"
+    }
   }
 }
