@@ -1,4 +1,4 @@
-# IA Local Bridge
+# <img src="public/icon.png" width="48" height="48" alt="App Icon" style="vertical-align: middle; border-radius: 8px; margin-right: 10px;"> IA Local Bridge
 
 A simple desktop AI client built with Electron and React. Connect to your favorite AI models whether cloud-based or running locally, in a beautiful, minimalist interface.
 
