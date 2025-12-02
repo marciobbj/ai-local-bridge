@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
-import { User, Bot, Copy, Check } from 'lucide-react';
-import { useState } from 'react';
+import { User, Bot, Copy, Check, ChevronDown, ChevronRight, Brain } from 'lucide-react';
+import { useState, useMemo, useEffect } from 'react';
 import clsx from 'clsx';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
@@ -10,9 +10,64 @@ import remarkGfm from 'remark-gfm';
 const MessageBubble = ({ message }) => {
     const isUser = message.role === 'user';
     const [copied, setCopied] = useState(false);
+    const [isThinkingOpen, setIsThinkingOpen] = useState(true);
+    const [thinkingDuration, setThinkingDuration] = useState(null);
+
+    const { content, thought, hasThought } = useMemo(() => {
+        if (!message.content) return { content: '', thought: '', hasThought: false };
+
+        const thinkMatch = message.content.match(/<think>([\s\S]*?)<\/think>/);
+        if (thinkMatch) {
+            return {
+                content: message.content.replace(/<think>[\s\S]*?<\/think>/, '').trim(),
+                thought: thinkMatch[1].trim(),
+                hasThought: true
+            };
+        }
+
+        // Handle unclosed think tag (streaming)
+        const openThinkMatch = message.content.match(/<think>([\s\S]*)$/);
+        if (openThinkMatch) {
+            return {
+                content: message.content.replace(/<think>[\s\S]*$/, '').trim(),
+                thought: openThinkMatch[1].trim(),
+                hasThought: true
+            };
+        }
+
+        return { content: message.content, thought: '', hasThought: false };
+    }, [message.content]);
+
+    // Calculate thinking duration (approximate based on message timestamp if available, or just length)
+    // Since we don't have exact start/end times for the thought block from the API, 
+    // we can't easily show "Thinking for X seconds" accurately without store changes.
+    // However, the user asked for it. 
+    // For now, let's just show "Thinking Process" and if we can, the duration.
+    // If the message is done (not streaming), we could estimate. 
+    // But let's stick to just showing the content first as per plan.
+    // Wait, the user explicitly asked for "how long the model thought".
+    // I'll add a simple timer that runs while the thought is streaming.
+
+    useEffect(() => {
+        if (message.thinkingDuration) {
+            setThinkingDuration(message.thinkingDuration);
+        } else if (message.thinkingStartTime && !message.thinkingDuration) {
+            // Live timer
+            const interval = setInterval(() => {
+                setThinkingDuration((Date.now() - message.thinkingStartTime) / 1000);
+            }, 100);
+            return () => clearInterval(interval);
+        }
+    }, [message.thinkingDuration, message.thinkingStartTime]);
+
+    const formatDuration = (seconds) => {
+        if (!seconds) return '';
+        if (seconds < 60) return `${seconds.toFixed(1)}s`;
+        return `${Math.floor(seconds / 60)}m ${(seconds % 60).toFixed(0)}s`;
+    };
 
     const handleCopy = () => {
-        navigator.clipboard.writeText(message.content);
+        navigator.clipboard.writeText(content); // Copy only the final answer
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
     };
@@ -40,6 +95,25 @@ const MessageBubble = ({ message }) => {
                     >
                         {copied ? <Check size={14} /> : <Copy size={14} />}
                     </button>
+                )}
+
+                {hasThought && (
+                    <div className="mb-4 border-b border-gray-700 pb-2">
+                        <button
+                            onClick={() => setIsThinkingOpen(!isThinkingOpen)}
+                            className="flex items-center gap-2 text-xs text-gray-400 hover:text-gray-300 transition-colors w-full"
+                        >
+                            <Brain size={14} />
+                            <span className="font-medium">Thinking Process {thinkingDuration && `(${formatDuration(thinkingDuration)})`}</span>
+                            {isThinkingOpen ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
+                        </button>
+
+                        {isThinkingOpen && (
+                            <div className="mt-2 pl-2 border-l-2 border-gray-700 text-gray-400 text-sm italic whitespace-pre-wrap">
+                                {thought}
+                            </div>
+                        )}
+                    </div>
                 )}
 
                 <div className="prose prose-invert prose-sm max-w-none break-words">
@@ -95,7 +169,7 @@ const MessageBubble = ({ message }) => {
                             }
                         }}
                     >
-                        {message.content}
+                        {content}
                     </ReactMarkdown>
                 </div>
 

@@ -173,10 +173,16 @@ export const useChatStore = create(
                 };
             }),
 
-            updateMessage: (id, content) => set((state) => {
-                const newMessages = state.messages.map((msg) =>
-                    msg.id === id ? { ...msg, content } : msg
-                );
+            updateMessage: (id, update) => set((state) => {
+                const newMessages = state.messages.map((msg) => {
+                    if (msg.id === id) {
+                        if (typeof update === 'string') {
+                            return { ...msg, content: update };
+                        }
+                        return { ...msg, ...update };
+                    }
+                    return msg;
+                });
 
                 // Update session with new messages to ensure persistence
                 const { sessions, currentSessionId } = state;
@@ -223,12 +229,31 @@ export const useChatStore = create(
                     const { createChatCompletion } = await import('../services/aiService');
                     const stream = await createChatCompletion([...messages, userMessage], settings);
 
+                    const startTime = Date.now();
                     let fullContent = '';
+                    let thinkingEndTime = null;
 
                     for await (const chunk of stream) {
                         const content = chunk.choices[0]?.delta?.content || '';
                         fullContent += content;
-                        updateMessage(assistantMessageId, fullContent);
+
+                        // Check if thinking just finished
+                        if (!thinkingEndTime && fullContent.includes('</think>')) {
+                            thinkingEndTime = Date.now();
+                        }
+
+                        // Update message with content and potentially duration
+                        const updates = { content: fullContent };
+                        if (thinkingEndTime) {
+                            updates.thinkingDuration = (thinkingEndTime - startTime) / 1000; // in seconds
+                        } else if (fullContent.includes('<think>') && !fullContent.includes('</think>')) {
+                            // Still thinking, maybe update a "current thinking time" if we wanted live timer?
+                            // For now, we only store final duration.
+                            // Actually, let's store the start time so the UI can show a live timer if it wants.
+                            updates.thinkingStartTime = startTime;
+                        }
+
+                        updateMessage(assistantMessageId, updates);
                     }
                 } catch (error) {
                     console.error('AI Error:', error);

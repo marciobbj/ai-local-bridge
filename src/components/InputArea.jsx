@@ -86,9 +86,14 @@ const InputArea = () => {
         e.preventDefault();
         if ((!text.trim() && attachments.length === 0) || isLoading) return;
 
-        await sendMessage(text, attachments);
+        const currentText = text;
+        const currentAttachments = attachments;
+
         setText('');
         setAttachments([]);
+        setAudioPreview(null); // Ensure audio preview is cleared too
+
+        await sendMessage(currentText, currentAttachments);
     };
 
     const handleKeyDown = (e) => {
