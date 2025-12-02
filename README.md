@@ -1,34 +1,34 @@
-# IA Local Bridge 🌉
+# IA Local Bridge
 
 A simple desktop AI client built with Electron and React. Connect to your favorite AI models—whether cloud-based or running locally—in a beautiful, minimalist interface.
 
 ![IA Local Bridge Screenshot](./imgs/screenshot_one.png)
 
-## ✨ Features
+## Features
 
-- **🤖 Multi-Provider Support**: Seamlessly switch between:
+- **Multi-Provider Support**: Seamlessly switch between:
   - **OpenAI**: Access GPT-4, GPT-3.5, etc.
   - **OpenRouter**: Access Claude, Llama 3, Mistral, and more.
   - **Google Gemini**: Access Gemini 1.5 Pro/Flash.
   - **DeepSeek**: Access DeepSeek Coder and Chat models.
   - **Qwen**: Access Alibaba's Qwen models via DashScope.
   - **Local AI**: Connect to Ollama, LM Studio, or LocalAI running on your machine.
-- **🔒 Privacy First**: Your API keys and chat history are stored **locally** on your device using `localStorage`. No data is sent to our servers.
-- **💬 Rich Chat Experience**:
+- **Privacy First**: Your API keys and chat history are stored **locally** on your device using `localStorage`. No data is sent to our servers.
+- **Rich Chat Experience**:
   - Full Markdown support with **Syntax Highlighting** for code blocks.
   - GitHub Flavored Markdown (tables, task lists, strikethrough).
   - Streaming responses for real-time interaction.
-- **📁 Media & Attachments**:
+- **Media & Attachments**:
   - **File Uploads**: Analyze documents and images (with compatible models).
   - **Screenshots**: Capture and attach screenshots directly within the app.
   - **Audio Recording**: Record voice notes or prompts.
-- **🗄️ Chat Management**:
+- **Chat Management**:
   - Organize conversations with a history sidebar.
   - **Archive** old chats to keep your workspace clean.
   - **Export** chats to Markdown (`.md`), Text (`.txt`), or JSON.
   - **Bulk Export** all your data for backup.
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 - **Electron**: For cross-platform desktop integration.
 - **React**: For a dynamic and responsive UI.
@@ -36,7 +36,7 @@ A simple desktop AI client built with Electron and React. Connect to your favori
 - **Tailwind CSS**: For modern, minimalist styling.
 - **Zustand**: For simple and effective state management.
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 
@@ -76,17 +76,17 @@ npm run build
 
 The output will be in the `dist` directory.
 
-## ⚙️ Configuration
+## Configuration
 
 1.  Click the **Settings** icon in the sidebar.
 2.  Choose your **Provider** (OpenRouter, OpenAI, Gemini, DeepSeek, Qwen, or Local).
 3.  Enter your **API Key** (stored locally).
 4.  Set the **Model ID** (e.g., `gemini-1.5-pro`, `deepseek-chat`, `qwen-turbo`).
 
-## 🤝 Contributing
+## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
-## 📄 License
+## License
 
 This project is open source and available under the [MIT License](LICENSE).
