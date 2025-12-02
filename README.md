@@ -1,12 +1,12 @@
 <div align="center">
   <img src="public/custom_icon.svg" width="128" height="128" alt="IA Local Bridge Icon" style="border-radius: 24px" />
-  <h1>IA Local Bridge</h1>
+  <h1>AI Local Bridge</h1>
   <p>
     A simple desktop AI client built with Electron and React. Connect to your favorite AI models whether cloud-based or running locally, in a beautiful, minimalist interface.
   </p>
 </div>
 
-![IA Local Bridge Screenshot](./imgs/screenshot.png)
+![AI Local Bridge Screenshot](./imgs/screenshot.png)
 
 ## Features
 

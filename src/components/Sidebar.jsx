@@ -24,9 +24,9 @@ const Sidebar = () => {
         <div className="flex flex-col h-full p-4">
             <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-2">
-                    <img src="./build/icon.png" alt="App Icon" className="w-8 h-8 rounded-lg" />
+                    <img src="/icon.png" alt="App Icon" className="w-8 h-8 rounded-lg" />
                     <h1 className="text-xl font-bold text-gray-400">
-                        IA Local Bridge
+                        AI Local Bridge
                     </h1>
                 </div>
                 <button onClick={toggleSidebar} className="text-gray-400 hover:text-white">
