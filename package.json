@@ -48,8 +48,8 @@
     "wait-on": "^9.0.3"
   },
   "build": {
-    "appId": "com.marciobbj.ialocalbridge",
-    "productName": "IA Local Bridge",
+    "appId": "com.marciobbj.ai-local-bridge",
+    "productName": "AI Local Bridge",
     "directories": {
       "output": "release"
     },
@@ -61,15 +61,15 @@
     "mac": {
       "target": "dmg",
       "category": "public.app-category.productivity",
-      "icon": "public/icon.png"
+      "icon": "public/custom_icon.png"
     },
     "win": {
       "target": "nsis",
-      "icon": "public/icon.png"
+      "icon": "public/custom_icon.png"
     },
     "linux": {
       "target": "AppImage",
-      "icon": "public/icon.png"
+      "icon": "public/custom_icon.png"
     }
   }
 }
