@@ -61,15 +61,15 @@
     "mac": {
       "target": "dmg",
       "category": "public.app-category.productivity",
-      "icon": "public/custom_icon.png"
+      "icon": "public/custom_icon.svg"
     },
     "win": {
       "target": "nsis",
-      "icon": "public/custom_icon.png"
+      "icon": "public/custom_icon.svg"
     },
     "linux": {
       "target": "AppImage",
-      "icon": "public/custom_icon.png"
+      "icon": "public/custom_icon.svg"
     }
   }
 }
