@@ -2,7 +2,7 @@
 
 A simple desktop AI client built with Electron and React. Connect to your favorite AI models—whether cloud-based or running locally—in a beautiful, minimalist interface.
 
-![IA Local Bridge Screenshot](https://placehold.co/800x500/1f2937/ffffff?text=IA+Local+Bridge+Preview)
+![IA Local Bridge Screenshot](./imgs/screenshot_one.png)
 
 ## ✨ Features
 
