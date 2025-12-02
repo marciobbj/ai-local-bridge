@@ -3,6 +3,7 @@ import { Plus, Settings, MessageSquare, PanelLeftClose, X, Archive, Download, Tr
 import { useChatStore } from '../store/useChatStore';
 import SettingsModal from './SettingsModal';
 import ContextMenu from './ContextMenu';
+import AppIcon from '../../public/icon.png';
 
 const Sidebar = () => {
     const { clearChat, toggleSidebar, sessions, loadSession, deleteSession, archiveSession, exportSession, currentSessionId, createNewChat } = useChatStore();
@@ -24,7 +25,7 @@ const Sidebar = () => {
         <div className="flex flex-col h-full p-4">
             <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-2">
-                    <img src="/icon.png" alt="App Icon" className="w-8 h-8 rounded-lg" />
+                    <img src={AppIcon} alt="App Icon" className="w-8 h-8 rounded-lg" />
                     <h1 className="text-xl font-bold text-gray-400">
                         AI Local Bridge
                     </h1>
