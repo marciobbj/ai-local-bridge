@@ -233,24 +233,43 @@ export const useChatStore = create(
                     let fullContent = '';
                     let thinkingEndTime = null;
 
+                    const THOUGHT_PATTERNS = [
+                        { start: '<think>', end: '</think>' },
+                        { start: '<thought>', end: '</thought>' },
+                        { start: '[THOUGHT]', end: '[/THOUGHT]' }
+                    ];
+
                     for await (const chunk of stream) {
                         const content = chunk.choices[0]?.delta?.content || '';
                         fullContent += content;
 
                         // Check if thinking just finished
-                        if (!thinkingEndTime && fullContent.includes('</think>')) {
-                            thinkingEndTime = Date.now();
+                        if (!thinkingEndTime) {
+                            for (const pattern of THOUGHT_PATTERNS) {
+                                if (fullContent.includes(pattern.end)) {
+                                    thinkingEndTime = Date.now();
+                                    break;
+                                }
+                            }
                         }
 
                         // Update message with content and potentially duration
                         const updates = { content: fullContent };
                         if (thinkingEndTime) {
                             updates.thinkingDuration = (thinkingEndTime - startTime) / 1000; // in seconds
-                        } else if (fullContent.includes('<think>') && !fullContent.includes('</think>')) {
-                            // Still thinking, maybe update a "current thinking time" if we wanted live timer?
-                            // For now, we only store final duration.
-                            // Actually, let's store the start time so the UI can show a live timer if it wants.
-                            updates.thinkingStartTime = startTime;
+                        } else {
+                            // Check if currently thinking
+                            let isThinking = false;
+                            for (const pattern of THOUGHT_PATTERNS) {
+                                if (fullContent.includes(pattern.start) && !fullContent.includes(pattern.end)) {
+                                    isThinking = true;
+                                    break;
+                                }
+                            }
+
+                            if (isThinking) {
+                                updates.thinkingStartTime = startTime;
+                            }
                         }
 
                         updateMessage(assistantMessageId, updates);

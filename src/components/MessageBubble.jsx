@@ -16,23 +16,32 @@ const MessageBubble = ({ message }) => {
     const { content, thought, hasThought } = useMemo(() => {
         if (!message.content) return { content: '', thought: '', hasThought: false };
 
-        const thinkMatch = message.content.match(/<think>([\s\S]*?)<\/think>/);
-        if (thinkMatch) {
-            return {
-                content: message.content.replace(/<think>[\s\S]*?<\/think>/, '').trim(),
-                thought: thinkMatch[1].trim(),
-                hasThought: true
-            };
-        }
+        const THOUGHT_PATTERNS = [
+            { start: '<think>', end: '</think>', regex: /<think>([\s\S]*?)<\/think>/, openRegex: /<think>([\s\S]*)$/ },
+            { start: '<thought>', end: '</thought>', regex: /<thought>([\s\S]*?)<\/thought>/, openRegex: /<thought>([\s\S]*)$/ },
+            { start: '[THOUGHT]', end: '[/THOUGHT]', regex: /\[THOUGHT\]([\s\S]*?)\[\/THOUGHT\]/, openRegex: /\[THOUGHT\]([\s\S]*)$/ }
+        ];
 
-        // Handle unclosed think tag (streaming)
-        const openThinkMatch = message.content.match(/<think>([\s\S]*)$/);
-        if (openThinkMatch) {
-            return {
-                content: message.content.replace(/<think>[\s\S]*$/, '').trim(),
-                thought: openThinkMatch[1].trim(),
-                hasThought: true
-            };
+        for (const pattern of THOUGHT_PATTERNS) {
+            // Check for complete thought
+            const match = message.content.match(pattern.regex);
+            if (match) {
+                return {
+                    content: message.content.replace(pattern.regex, '').trim(),
+                    thought: match[1].trim(),
+                    hasThought: true
+                };
+            }
+
+            // Check for unclosed thought (streaming)
+            const openMatch = message.content.match(pattern.openRegex);
+            if (openMatch) {
+                return {
+                    content: message.content.replace(pattern.openRegex, '').trim(),
+                    thought: openMatch[1].trim(),
+                    hasThought: true
+                };
+            }
         }
 
         return { content: message.content, thought: '', hasThought: false };
